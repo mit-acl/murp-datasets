@@ -1,0 +1,208 @@
+\newcommand{\mytodo}[1]{\textcolor{red}{#1}}
+\newcommand{\myquote}[1]{\textcolor{blue}{#1}}
+\newcommand{\mycite}{\textcolor{red}{[?]}}
+
+% https://www.overleaf.com/learn/latex/Using_colors_in_LaTeX
+% https://matplotlib.org/stable/gallery/color/named_colors.html
+\definecolor{tab-blue}{rgb}{0.122, 0.467, 0.706}
+\definecolor{tab-orange}{rgb}{1.000, 0.498, 0.055}
+\definecolor{tab-green}{rgb}{0.173, 0.627, 0.173}
+\definecolor{tab-red}{rgb}{0.839, 0.153, 0.157}
+\definecolor{tab-purple}{rgb}{0.580, 0.404, 0.741}
+\definecolor{tab-brown}{rgb}{0.549, 0.337, 0.294}
+\definecolor{tab-pink}{rgb}{0.890, 0.467, 0.761}
+\definecolor{tab-gray}{rgb}{0.498, 0.498, 0.498}
+\definecolor{tab-olive}{rgb}{0.737, 0.741, 0.133}
+\definecolor{tab-cyan}{rgb}{0.090, 0.745, 0.812}
+
+%\def\argmax{\mathop{\rm argmax}}
+%\def\argmin{\mathop{\rm argmin}}
+
+\newcommand{\meas}[1]{$\text{#1}$}
+
+\newcommand{\mybox}[2]{
+\dashbox{\hbox{\hspace{0mm} \vbox{ \vspace{-1mm}
+\textbf{#1:}
+
+#2} \hspace{0mm} }}}
+
+\newcommand{\dd}[2]{\frac{d#1}{d#2}}
+\newcommand{\pp}[2]{\frac{\partial#1}{\partial#2}}
+
+\newcommand{\ddx}{\frac{d}{dx}}
+\newcommand{\ddy}{\frac{d}{dy}}
+\newcommand{\ddn}{\frac{d}{dn}}
+\newcommand{\ddt}{\frac{d}{dt}}
+
+% ceil floor
+\usepackage{mathtools} % needed for DeclarePairedDelimiter
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+% P:() B:[] V:|| C:{} A:<>
+\DeclarePairedDelimiter\BigP{\Big(}{\Big)}
+\DeclarePairedDelimiter\BiggP{\Bigg(}{\Bigg)}
+\DeclarePairedDelimiter\BigB{\Big[}{\Big]}
+\DeclarePairedDelimiter\BiggB{\Bigg[}{\Bigg]}
+\DeclarePairedDelimiter\BigV{\Big|}{\Big|}
+\DeclarePairedDelimiter\BiggV{\Bigg|}{\Bigg|}
+\DeclarePairedDelimiter\BigC{\Big\{}{\Big\}}
+\DeclarePairedDelimiter\BiggC{\Bigg\{}{\Bigg\}}
+\DeclarePairedDelimiter\BigA{\Big\langle}{\Big\rangle}
+\DeclarePairedDelimiter\BiggA{\Bigg\langle}{\Bigg\rangle}
+
+\newcommand{\sigmasq}{\sigma^2}
+\newcommand{\chisq}{\chi^2}
+\newcommand{\hint}[1]{$[$\textit{Hint:} #1$]$}
+
+% Resize display math
+% https://tex.stackexchange.com/questions/95821/how-to-scale-or-resize-equation-with-eqno-in-latex#378327
+\newcommand\scalemath[2]{\scalebox{#1}{\mbox{\ensuremath{\displaystyle #2}}}}
+
+% From 18.002
+\DeclareMathOperator*{\argmax}{\arg\!\max}
+\DeclareMathOperator*{\argmin}{\arg\!\min}
+
+\newcommand{\myline}{\par\noindent\rule{\textwidth}{0.4pt}}
+\newcommand{\mydash}{\par\noindent\dotfill}
+
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\naturals}{\mathbb{N}}
+\newcommand{\integers}{\mathbb{Z}}
+\newcommand{\rationals}{\mathbb{Q}}
+\newcommand{\integrable}{\mathscr{R}}
+
+\newcommand{\amp}{&&&&&&&&&&&&}
+\newcommand{\st}{\text{ s.t. }}
+\newcommand{\qst}{\quad\st\quad}
+\newcommand{\qqst}{\qquad\st\qquad}
+\newcommand{\qrightarrow}{\quad\rightarrow\quad}
+\newcommand{\qqrightarrow}{\qquad\rightarrow\qquad}
+\newcommand{\qRightarrow}{\quad\Rightarrow\quad}
+\newcommand{\qqRightarrow}{\qquad\Rightarrow\qquad}
+\newcommand{\qleftrightarrow}{\quad\leftrightarrow\quad}
+\newcommand{\qqleftrightarrow}{\qquad\leftrightarrow\qquad}
+\newcommand{\qLeftrightarrow}{\quad\Leftrightarrow\quad}
+\newcommand{\qqLeftrightarrow}{\qquad\Leftrightarrow\qquad}
+\newcommand{\qcolon}{\quad:\quad}
+\newcommand{\qqcolon}{\qquad:\qquad}
+
+% RA-L math symbols
+\DeclarePairedDelimiter\tup{\langle}{\rangle}
+
+\newcommand{\I}{\mathcal{I}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\R}{\mathcal{R}}
+\renewcommand{\P}{\mathcal{P}}
+\renewcommand{\L}{\ell}
+\newcommand{\loss}{\L}
+
+\newcommand{\SE}[1]{SE(#1)}
+\newcommand{\SO}[1]{SO(#1)}
+
+\newcommand{\anglefull}{[-180^\circ,180^\circ]}
+\newcommand{\anglehalf}{[-90^\circ,90^\circ]}
+
+\renewcommand{\a}{A}
+\renewcommand{\b}{B}
+\newcommand{\w}{W}
+\newcommand{\ab}{^{\a}_{\b}}
+
+\newcommand{\A}{A}
+\newcommand{\B}{B}
+\newcommand{\Ai}{{\A_i}}
+\newcommand{\Bj}{{\B_j}}
+\newcommand{\AB}{^{\A}_{\B}}
+\newcommand{\AiBj}{^\Ai_\Bj}
+\newcommand{\wA}{^{\w}_{\A}}
+\newcommand{\wB}{^{\w}_{\B}}
+\newcommand{\wR}{^{\w}_{R}}
+
+\newcommand{\NR}{N_R}
+\newcommand{\NA}{{N_\A}}
+\newcommand{\NB}{{N_\B}}
+
+\newcommand{\p}{\mathbf{p}}
+\newcommand{\ph}{\breve{\p}}
+
+\newcommand{\T}{\mathbf{T}}
+\newcommand{\Tab}{\T\ab}
+\newcommand{\TAB}{\T\AB}
+\newcommand{\TAiBj}{\T\AiBj}
+
+\newcommand{\Rot}{\mathbf{R}}
+\newcommand{\Rotx}{\Rot_x}
+\newcommand{\Roty}{\Rot_y}
+\newcommand{\Rotz}{\Rot_z}
+\newcommand{\Rotab}{\Rot\ab}
+\newcommand{\RotAB}{\Rot\AB}
+
+\newcommand{\x}{x}
+\newcommand{\xab}{\x\ab}
+\newcommand{\xAB}{\x\AB}
+
+\newcommand{\y}{y}
+\newcommand{\yab}{\y\ab}
+\newcommand{\yAB}{\y\AB}
+
+\newcommand{\z}{z}
+\newcommand{\zab}{\z\ab}
+\newcommand{\zAB}{\z\AB}
+
+\newcommand{\roll}{\alpha}
+\newcommand{\rollab}{\roll\ab}
+\newcommand{\rollAB}{\roll\AB}
+
+\newcommand{\pitch}{\beta}
+\newcommand{\pitchab}{\pitch\ab}
+\newcommand{\pitchAB}{\pitch\AB}
+
+\newcommand{\yaw}{\gamma}
+\newcommand{\yawab}{\yaw\ab}
+\newcommand{\yawAB}{\yaw\AB}
+
+\newcommand{\trans}{\mathbf{t}}
+\newcommand{\transab}{\trans\ab}
+\newcommand{\transAB}{\trans\AB}
+
+\newcommand{\envel}{\bm{\kappa}}
+\newcommand{\envelc}{\hat{\envel}}
+\newcommand{\envelt}{\check{\envel}}
+\newcommand{\envelm}{\tilde{\envel}}
+
+\newcommand{\zc}{\hat{\z}}
+\newcommand{\rollc}{\hat{\roll}}
+\newcommand{\pitchc}{\hat{\pitch}}
+
+\newcommand{\zt}{\check{\z}}
+\newcommand{\rollt}{\check{\roll}}
+\newcommand{\pitcht}{\check{\pitch}}
+
+\newcommand{\zm}{\tilde{\z}}
+\newcommand{\rollm}{\tilde{\roll}}
+\newcommand{\pitchm}{\tilde{\pitch}}
+
+\renewcommand{\d}{d}
+\newcommand{\dm}{\tilde{\d}}
+\newcommand{\dn}{\bar{\d}}
+
+\newcommand{\dv}{\mathbf{\d}}
+\newcommand{\dvm}{\tilde{\dv}}
+\newcommand{\dvn}{\bar{\dv}}
+
+\newcommand{\e}{e}
+
+\newcommand{\sumi}{\sum_{i = 1}^{\NA}}
+\newcommand{\sumj}{\sum_{j = 1}^{\NB}}
+
+\newcommand{\bs}{\vspace{1mm} \noindent}
+\newcommand{\bns}{\noindent}
+
+\newcommand{\edit}[1]{\textcolor{blue}{#1}}
+
+% https://tex.stackexchange.com/a/9372
+\newcommand{\mytexttilde}{\raisebox{0.5ex}{\texttildelow}}
+
+\newcommand{\frameto}[2]{^{#1}_{#2}}
+\newcommand{\var}[1]{\texttt{var}\left[#1\right]}
+\newcommand{\std}[1]{\texttt{std}\left[#1\right]}

@@ -1,0 +1,92 @@
+\documentclass[12pt,letterpaper]{article}
+\input{preamble}
+\input{mycommands}
+
+\title{Table II Explanation}
+\author{Andrew Fishberg}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+The values in Table II are calculated similarly to Dilution of Precision (DOP), a common uncertainty metric in GPS \cite{langley1999dilution}. Specifically, we are computing Position DOP (PDOP), the norm of the $x$, $y$, $z$ covariances (i.e., $\sigma_{xx}$, $\sigma_{yy}$, $\sigma_{zz}$), after being propagated through the nonlinear geometry linearized with respect to position and then evaluated at some relative pose $\TAB$.
+
+This document breaks down this computation and shows how these values are calculated in the accompanying Jupyter Notebook.
+
+\section{Problem Formulation:}
+
+Consider two agents, $A$ and $B$, in world frame $W$ with true state vectors:
+$$\mathbf{x}\frameto{W}{A} = \begin{bmatrix} x\frameto{W}{A} & y\frameto{W}{A} & z\frameto{W}{A} & \roll\frameto{W}{A} & \pitch\frameto{W}{A} & \yaw\frameto{W}{A} \end{bmatrix}^\top = \mathbf{T}\frameto{W}{A}$$
+$$\mathbf{x}\frameto{W}{B} = \begin{bmatrix} x\frameto{W}{B} & y\frameto{W}{B} & z\frameto{W}{B} & \roll\frameto{W}{B} & \pitch\frameto{W}{B} & \yaw\frameto{W}{B} \end{bmatrix}^\top = \mathbf{T}\frameto{W}{B}$$
+where $\tup{x,y,z}$ refers to position and $\tup{\alpha, \beta, \gamma}$ refers to roll/pitch/yaw, superscript represents the frame, and subscript represents the target. While in general $\mathbf{x} \leftrightarrow \mathbf{T}$, $\mathbf{x}$ refers to a column state vector while $\mathbf{T}$ refers to $\reals^{4\times 4}$ transformation matrix. Additionally, let $\mathbf{T}(\cdot)$ refer to the function that constructs a transformation matrix. Specifically, the following notations and shorthands are equivalent:
+%$$\mathbf{T}\frameto{A}{B} = \mathbf{T}(\mathbf{x}\frameto{A}{B}) = \mathbf{T}(x\frameto{A}{B}, y\frameto{A}{B}, z\frameto{A}{B}, \roll\frameto{A}{B}, \pitch\frameto{A}{B}, \yaw\frameto{A}{B}) = \left(\mathbf{T}\frameto{W}{A}\right)^{-1} \mathbf{T}\frameto{W}{B}$$
+\begin{align*}
+\mathbf{T}(\mathbf{x}) &= \mathbf{T}(x, y, z, \roll, \pitch, \yaw) \\
+\mathbf{T}(x, y, z) &= \mathbf{T}(x, y, z, 0, 0, 0) \\
+\mathbf{T}(x, y, z, \yaw) &= \mathbf{T}(x, y, z, 0, 0, \yaw)
+\end{align*}
+Let the relative state from agent $A$ to agent $B$ be defined as:
+$$\mathbf{x} = \mathbf{x}\frameto{A}{B} = \begin{bmatrix} x\frameto{A}{B} & y\frameto{A}{B} & z\frameto{A}{B} & \roll\frameto{A}{B} & \pitch\frameto{A}{B} & \yaw\frameto{A}{B} \end{bmatrix}^\top = \left(\mathbf{T}\frameto{W}{A}\right)^{-1} \mathbf{T}\frameto{W}{B} = \mathbf{T}\frameto{A}{B}$$
+Relative coordinate frames are assumed to be oriented with respect to downward gravity.
+
+\noindent Here, we have:
+\begin{itemize}
+\item $\hat{\mathbf{x}}$ are the estimated state parameters
+\item $\mathbf{z}$ are the current measurements
+\end{itemize}
+where:
+\begin{itemize}
+\item $\hat{\mathbf{x}} \in \reals^3 \implies \hat{\mathbf{x}} = \begin{bmatrix}\hat{x}\frameto{A}{B} & \hat{y}\frameto{A}{B} & \hat{z}\frameto{A}{B}\end{bmatrix}$
+\item $\mathbf{z} \in \reals^{37}$ has measurement model:
+$$\mathbf{h}(\mathbf{x}\frameto{A}{B}) = \begin{bmatrix} \mathbf{d} & z\frameto{A}{B} \end{bmatrix}^\top$$
+where $z\frameto{A}{B} \in \reals$ is the relative altitude and $\mathbf{d}$ is the vector of true UWB range. In this case, there are $\mathbf{d} \in \reals^{36}$ since agent $A$ and $B$ have $N_A = 6$ and $N_B = 6$ antennas respectively. In general, $\mathbf{d}$ has the form:
+$$\mathbf{d} = \begin{bmatrix} d_{11} & d_{12} & & \dots & d_{N_A N_B}\end{bmatrix}^\top$$
+with each element defined as:
+$$d_{ij} = d_{ij}(\mathbf{x}\frameto{A}{B}) = ||\mathbf{T}\frameto{A}{B}\mathbf{p}\frameto{B}{j} - \mathbf{p}\frameto{A}{i}||_2$$
+where $\mathbf{p}\frameto{A}{i}$ and $\mathbf{p}\frameto{B}{j}$ is the homogeneous coordinate of agent $A$'s $i$th and $B$'s $j$th antenna in $A$'s and $B$'s frame respectively.
+\end{itemize}
+With this measurement model, we can convince ourselves the system is fully observable. Specifically, the direct inclusion of $z\frameto{A}{B}$ into the measurement model resolves the usual $\pm z$ ambiguity stemming from antennas only spanning their relative $xy$-plane.
+
+We note that while $z\frameto{A}{B}$ is not directly measurable, since both local $z$-axes are aligned with gravity down, $z\frameto{A}{B}$ can be calculated as the difference of two realizable measurements:
+$$z\frameto{A}{B} = z\frameto{W}{B} - z\frameto{W}{A}$$
+In practice, while we can always locally measure $z\frameto{W}{A}$, we do not want to transmit $z\frameto{W}{B}$. This will need to be considered in our error analysis.
+
+\clearpage
+\section{Computing PDOP:}
+
+Consider following formulas from \cite{langley1999dilution}:
+$$\Sigma_x = (A^\top \Sigma_z^{-1} A)^{-1}$$
+in general, which can be simplified to:
+$$\Sigma_x = (A^\top A)^{-1} \sigma^2$$
+when covariances are consistent across all measurements and independent. Here, we have:
+\begin{itemize}
+    \item $A$ is the linearized measurement model about some point $\mathbf{x}_0$
+    \item $\Sigma_z$ is the covariance matrix of the measurements $\mathbf{z}$
+    \item $\Sigma_x$ is the covariance matrix of the state variables $\mathbf{x}$ after being propagated through the linearized measurement model $A$
+\end{itemize}
+
+When calculating DOP, the diagonal values of $(A^\top A)^{-1}$ are \texttt{XDOP}, \texttt{YDOP}, \texttt{ZDOP} values (i.e., the variance amplification resulting from the linearized geometry in various state dimensions).
+
+In general since $d_{ij}$ is a UWB measurement and $z\frameto{A}{B}$ is some calculated combination of a low variance LiDAR measurement and/or high variance assumption, we have:
+$$\var{d_{ij}} \neq \var{z\frameto{A}{B}}$$
+forcing us to use the former equation to calculate $\Sigma_x$. 
+
+In the paper (Figure 2a), we experimentally measured our UWB measurement variance to be:
+$$\var{d_{ij}} = 0.24\text{m}$$
+For the purpose of this error analysis, we will assume the measurement error is modeled by a zero mean Gaussian.
+
+Depending on our experimental setup, $z\frameto{W}{A}$ and $z\frameto{W}{B}$ are either measured by downward facing LiDAR (with a reported operating tolerance of $\pm 4\text{cm}$ in our operating range) or assumed by some pre-communicated (but locally monitored) global altitude tolerance (i.e., $\bar{z}\frameto{W}{A} \pm \tilde{z}\frameto{W}{A}$ and $\bar{z}\frameto{W}{B} \pm \tilde{z}\frameto{W}{B}$ respectively where $\bar{z}$ is the commanded altitude and $\tilde{z}$ is the altitude tolerance).
+
+\clearpage
+\section{Jupyter Notebook:}
+
+Using the $\hat{\mathbf{x}} \in \reals^3$ and $\mathbf{z} \in \reals^{37}$ as defined above, we perform the above error analysis with different values for $\var{z\frameto{A}{B}}$ (selected based on current communication/sensor assumptions and encoded in $\Sigma_z$) and different measurement model linearization points (select based on current position and encoded in $A$) and calculate the corresponding PDOPs. This implies $A$ is of the form $\reals^{37 \times 3}$, making this a cumbersome computation to do by hand. Thus, we make the Jupyter Notebook used to compute Table II (and other relevant facts) available here:
+\begin{itemize}
+\item \url{https://github.com/mit-acl/murp-datasets}
+\end{itemize}
+
+\bibliographystyle{unsrt}
+\bibliography{ref.bib}
+
+\end{document}
