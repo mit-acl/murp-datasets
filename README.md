@@ -9,3 +9,14 @@ This paper has been accepted to IEEE Robotics and Automation Letters. The offici
 ## Repo Organization
 * `datasets`: Contains data collected from paper, over 200 hours of pairwise UWB range measurements with ground truth open sourced for the robotics community.
 * `table2`: Supplementary material showing how the theoretical values in Table II were produced.
+
+## Citations
+```
+@article{fishberg2024murp,
+  title={Murp: Multi-agent ultra-wideband relative pose estimation with constrained communications in 3d environments},
+  author={Fishberg, Andrew and Quiter, Brian and How, Jonathan P},
+  journal={IEEE Robotics and Automation Letters},
+  year={2024},
+  publisher={IEEE}
+}
+```
